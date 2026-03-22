@@ -22,11 +22,13 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: 赋予 Gradle 脚本执行权限
-      run: chmod +x gradlew
+    - name: 自动配置官方 Gradle 构建引擎
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: 8.5
 
     - name: 编译精简发布版 (Release) APK
-      run: ./gradlew assembleRelease
+      run: gradle assembleRelease
 
     - name: 重命名发版 APK 以便于更直观的展示
       run: mv app/build/outputs/apk/release/app-release.apk MinimalCalendar-v1.0.${{ github.run_number }}.apk
