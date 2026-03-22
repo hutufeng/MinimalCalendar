@@ -57,9 +57,11 @@ fun DayCell(
 ) {
     val isCurrentMonth = day.isCurrentMonth
     val alpha = if (isCurrentMonth) 1f else 0.3f
+    
     val bgColor = if (isSelected) MaterialTheme.colorScheme.onBackground else Color.Transparent
+    
     val txtColor = if (isSelected) {
-        MaterialTheme.colorScheme.background 
+        MaterialTheme.colorScheme.background
     } else if (day.isWeekend) {
         HolidayRed.copy(alpha = 0.8f)
     } else {
