@@ -58,7 +58,7 @@ fun DayCell(
     val isCurrentMonth = day.isCurrentMonth
     val alpha = if (isCurrentMonth) 1f else 0.3f
     
-    val bgColor = if (isSelected) MaterialTheme.colorScheme.onBackground else Color.Transparent
+    val bgColor = if (isSelected) MaterialTheme.colorScheme.onBackground.copy(alpha = alpha) else Color.Transparent
     
     val txtColor = if (isSelected) {
         MaterialTheme.colorScheme.background
@@ -85,7 +85,7 @@ fun DayCell(
             .padding(4.dp)
             .clip(RoundedCornerShape(8.dp))
             .then(borderModifier)
-            .background(bgColor.copy(alpha = alpha))
+            .background(bgColor)
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
