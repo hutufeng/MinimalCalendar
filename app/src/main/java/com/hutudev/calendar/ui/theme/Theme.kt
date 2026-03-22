@@ -30,16 +30,16 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Black,
+    primary = SlateDeepBlue,
     secondary = Gray800,
     tertiary = WeekendGray,
-    background = White,
+    background = SoftBackground,
     surface = Gray100, // Minimal boundary colors
     onPrimary = White,
-    onSecondary = Black,
-    onTertiary = Black,
-    onBackground = Black,
-    onSurface = Black
+    onSecondary = White,
+    onTertiary = White,
+    onBackground = SlateDeepBlue,
+    onSurface = SlateDeepBlue
 )
 
 @Composable
