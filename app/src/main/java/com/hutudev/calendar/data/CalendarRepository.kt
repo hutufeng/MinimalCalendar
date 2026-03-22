@@ -6,8 +6,11 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.hutudev.calendar.ui.theme.ThemeConfig
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 private val Context.dataStore by preferencesDataStore(name = "holiday_cache")
@@ -16,6 +19,23 @@ class CalendarRepository(private val context: Context) {
 
     private val apiService = HolidayApiService.create()
     private val gson = Gson()
+
+    private val themeConfigKey = stringPreferencesKey("theme_config")
+
+    val themeConfigFlow: Flow<ThemeConfig> = context.dataStore.data.map { prefs ->
+        val name = prefs[themeConfigKey] ?: ThemeConfig.SYSTEM.name
+        try {
+            ThemeConfig.valueOf(name)
+        } catch (e: Exception) {
+            ThemeConfig.SYSTEM
+        }
+    }
+
+    suspend fun setThemeConfig(config: ThemeConfig) {
+        context.dataStore.edit { prefs ->
+            prefs[themeConfigKey] = config.name
+        }
+    }
 
     suspend fun getMonthData(year: Int, month: Int): MonthData = withContext(Dispatchers.Default) {
         val baseMonthData = CalendarEngine.generateMonthData(year, month)

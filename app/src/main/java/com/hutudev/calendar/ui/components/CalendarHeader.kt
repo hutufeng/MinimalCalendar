@@ -9,12 +9,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.hutudev.calendar.ui.theme.ThemeConfig
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CalendarHeader(
     year: Int,
     month: Int,
+    themeConfig: ThemeConfig,
+    onThemeToggle: () -> Unit,
     onPrevClick: () -> Unit,
     onNextClick: () -> Unit,
     onTodayClick: () -> Unit,
@@ -60,15 +63,29 @@ fun CalendarHeader(
             )
         }
         
-        Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-             Text(
-                 text = "回到今天",
-                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
-                 color = MaterialTheme.colorScheme.onBackground,
-                 modifier = Modifier.clickable { onTodayClick() }.padding(4.dp)
-             )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val themeIcon = when (themeConfig) {
+                ThemeConfig.SYSTEM -> "⚙️"
+                ThemeConfig.LIGHT -> "🌞"
+                ThemeConfig.DARK -> "🌙"
+            }
+            Text(
+                text = themeIcon,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.clickable { onThemeToggle() }.padding(4.dp)
+            )
+
+            Text(
+                text = "回到今天",
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.clickable { onTodayClick() }.padding(4.dp)
+            )
              
-             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(
                     text = "<",
                     style = MaterialTheme.typography.titleLarge,

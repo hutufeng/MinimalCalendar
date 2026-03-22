@@ -12,6 +12,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hutudev.calendar.ui.components.*
+import com.hutudev.calendar.ui.theme.ThemeConfig
 import kotlin.math.abs
 
 enum class SwipeDirection { LEFT, RIGHT, UP, DOWN, NONE }
@@ -21,6 +22,7 @@ fun CalendarScreen(viewModel: CalendarViewModel = viewModel()) {
     val currentYearMonth by viewModel.currentYearMonth.collectAsState()
     val monthData by viewModel.monthData.collectAsState()
     val selectedDay by viewModel.selectedDay.collectAsState()
+    val themeConfig by viewModel.themeConfig.collectAsState()
 
     var swipeDir by remember { mutableStateOf(SwipeDirection.NONE) }
 
@@ -34,6 +36,15 @@ fun CalendarScreen(viewModel: CalendarViewModel = viewModel()) {
         CalendarHeader(
             year = currentYearMonth.first,
             month = currentYearMonth.second,
+            themeConfig = themeConfig,
+            onThemeToggle = {
+                val nextConfig = when (themeConfig) {
+                    ThemeConfig.SYSTEM -> ThemeConfig.LIGHT
+                    ThemeConfig.LIGHT -> ThemeConfig.DARK
+                    ThemeConfig.DARK -> ThemeConfig.SYSTEM
+                }
+                viewModel.updateThemeConfig(nextConfig)
+            },
             onPrevClick = { swipeDir = SwipeDirection.RIGHT; viewModel.shiftMonth(-1) },
             onNextClick = { swipeDir = SwipeDirection.LEFT; viewModel.shiftMonth(1) },
             onTodayClick = { swipeDir = SwipeDirection.NONE; viewModel.goToToday() },

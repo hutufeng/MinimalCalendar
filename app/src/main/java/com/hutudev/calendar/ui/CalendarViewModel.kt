@@ -6,9 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.hutudev.calendar.data.CalendarDay
 import com.hutudev.calendar.data.CalendarRepository
 import com.hutudev.calendar.data.MonthData
+import com.hutudev.calendar.ui.theme.ThemeConfig
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -16,6 +19,13 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     private val repository = CalendarRepository(application)
     private val monthCache = mutableMapOf<String, MonthData>()
+
+    val themeConfig: StateFlow<ThemeConfig> = repository.themeConfigFlow
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ThemeConfig.SYSTEM
+        )
 
     private val _monthData = MutableStateFlow<MonthData?>(null)
     val monthData: StateFlow<MonthData?> = _monthData.asStateFlow()
@@ -28,6 +38,12 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     init {
         goToToday()
+    }
+
+    fun updateThemeConfig(config: ThemeConfig) {
+        viewModelScope.launch {
+            repository.setThemeConfig(config)
+        }
     }
 
     fun selectDay(day: CalendarDay) {
