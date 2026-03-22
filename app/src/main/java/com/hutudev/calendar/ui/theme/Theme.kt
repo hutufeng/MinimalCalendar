@@ -67,6 +67,13 @@ fun MinimalCalendarTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
+            
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                view.isForceDarkAllowed = false
+                window.decorView.isForceDarkAllowed = false
+                view.rootView.isForceDarkAllowed = false
+            }
+
             // 因为使用了 enableEdgeToEdge(), 应该保持状态栏透明，通过 WindowCompat 控制图标颜色
             window.statusBarColor = Color.Transparent.toArgb()
             window.navigationBarColor = Color.Transparent.toArgb()
